@@ -3,47 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Juan David Posada | Desarrollo Web & Bots</title>
+    <title>Juan David Posada | Portafolio & CV</title>
     
-    <!-- Tailwind CSS (Framework de estilos) -->
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Fuentes Google (Inter para estilo Mac/Clean) -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Fuentes Google -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- Iconos Lucide -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
-    <!-- Configuración personalizada de Tailwind -->
+    <!-- Configuración Tailwind -->
     <script>
         tailwind.config = {
             darkMode: 'class',
             theme: {
                 extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    },
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
                     colors: {
                         brand: {
-                            dark: '#0B0B15',
-                            purple: '#6D28D9',
-                            accent: '#A78BFA',
-                            glass: 'rgba(255, 255, 255, 0.05)',
+                            dark: '#050505',
+                            purple: '#7c3aed',
+                            accent: '#a78bfa',
                         }
                     },
                     animation: {
                         'float': 'float 6s ease-in-out infinite',
-                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-                        'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+                        'pulse-glow': 'pulseGlow 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
                     },
                     keyframes: {
                         float: {
                             '0%, 100%': { transform: 'translateY(0)' },
-                            '50%': { transform: 'translateY(-20px)' },
+                            '50%': { transform: 'translateY(-10px)' },
                         },
-                        fadeInUp: {
-                            '0%': { opacity: '0', transform: 'translateY(20px)' },
-                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        pulseGlow: {
+                            '0%, 100%': { opacity: 0.1 },
+                            '50%': { opacity: 0.3 },
                         }
                     }
                 }
@@ -52,358 +48,452 @@
     </script>
 
     <style>
-        /* Estilos base y efectos visuales */
-        body {
-            background-color: #050505;
-            color: #ffffff;
-            overflow-x: hidden;
+        /* Estilos Base */
+        body { background-color: #020205; color: #ffffff; overflow-x: hidden; }
+
+        /* Gradiente de fondo fijo */
+        .bg-fixed-gradient {
+            background: radial-gradient(circle at 50% 0%, #2e1065 0%, #000000 60%);
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; opacity: 0.6;
         }
 
-        /* Fondo gradiente sutil */
-        .bg-gradient-radial {
-            background: radial-gradient(circle at center, #2e1065 0%, #000000 70%);
-            opacity: 0.4;
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-        }
-
-        /* Efecto Glassmorphism (Estilo Mac) */
-        .glass-card {
+        /* Glassmorphism */
+        .glass {
             background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
         }
 
         .glass-nav {
-            background: rgba(5, 5, 5, 0.7);
+            background: rgba(2, 2, 5, 0.8);
             backdrop-filter: blur(20px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        /* Texto con gradiente */
+        /* Text Gradients */
         .text-gradient {
-            background: linear-gradient(to right, #c084fc, #6366f1);
+            background: linear-gradient(to right, #a78bfa, #c4b5fd);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
-        /* Canvas para partículas */
-        #particle-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -2;
-            pointer-events: none;
+        /* Utilidades */
+        .skill-tag {
+            background: rgba(124, 58, 237, 0.15);
+            border: 1px solid rgba(124, 58, 237, 0.3);
+            color: #d8b4fe;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
         }
 
-        /* Utilidad para animaciones al hacer scroll */
-        .reveal {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.8s ease-out;
-        }
-        .reveal.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        .reveal { opacity: 0; transform: translateY(20px); transition: all 0.6s ease-out; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
     </style>
 </head>
-<body class="antialiased selection:bg-purple-500 selection:text-white">
+<body class="antialiased">
 
-    <!-- Canvas para animación de fondo -->
-    <canvas id="particle-canvas"></canvas>
-    <div class="bg-gradient-radial"></div>
+    <!-- Canvas Fondo -->
+    <canvas id="particle-canvas" class="fixed top-0 left-0 w-full h-full pointer-events-none -z-10"></canvas>
+    <div class="bg-fixed-gradient"></div>
 
     <!-- Navegación -->
-    <nav class="fixed w-full z-50 glass-nav transition-all duration-300" id="navbar">
+    <nav class="fixed w-full z-50 glass-nav">
         <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-            <a href="#" class="text-2xl font-bold tracking-tighter hover:opacity-80 transition-opacity">
+            <a href="#" class="text-xl font-bold tracking-tight hover:text-purple-400 transition-colors">
                 JD<span class="text-purple-500">.</span>Posada
             </a>
+            
+            <!-- Desktop Menu -->
             <div class="hidden md:flex space-x-8 text-sm font-medium text-gray-300">
-                <a href="#inicio" class="hover:text-white transition-colors">Inicio</a>
+                <a href="#perfil" class="hover:text-white transition-colors">Perfil Profesional</a>
+                <a href="#habilidades" class="hover:text-white transition-colors">Habilidades</a>
+                <a href="#proyectos" class="hover:text-white transition-colors">Proyectos</a>
                 <a href="#servicios" class="hover:text-white transition-colors">Servicios</a>
-                <a href="#sobre-mi" class="hover:text-white transition-colors">Sobre Mí</a>
-                <a href="#contacto" class="px-4 py-2 rounded-full bg-purple-600/20 text-purple-300 border border-purple-500/30 hover:bg-purple-600 hover:text-white transition-all">
-                    Contáctame
-                </a>
             </div>
-            <!-- Botón móvil -->
+
+            <a href="#contacto" class="hidden md:block px-5 py-2 rounded-full bg-purple-600 hover:bg-purple-500 text-white text-sm font-medium transition-all shadow-[0_0_15px_rgba(124,58,237,0.3)] hover:shadow-[0_0_25px_rgba(124,58,237,0.5)]">
+                Contactar
+            </a>
+
+            <!-- Mobile Menu Button -->
             <button class="md:hidden text-white" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')">
                 <i data-lucide="menu"></i>
             </button>
         </div>
-        <!-- Menú Móvil -->
-        <div id="mobile-menu" class="hidden md:hidden glass-card absolute w-full left-0 border-t border-gray-800 p-4 flex flex-col space-y-4">
-            <a href="#inicio" class="block text-gray-300 hover:text-white">Inicio</a>
-            <a href="#servicios" class="block text-gray-300 hover:text-white">Servicios</a>
-            <a href="#sobre-mi" class="block text-gray-300 hover:text-white">Sobre Mí</a>
+        
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden glass border-t border-gray-800 p-4 space-y-3">
+            <a href="#perfil" class="block text-gray-300 hover:text-white">Perfil</a>
+            <a href="#habilidades" class="block text-gray-300 hover:text-white">Habilidades</a>
+            <a href="#proyectos" class="block text-gray-300 hover:text-white">Proyectos</a>
             <a href="#contacto" class="block text-purple-400 font-bold">Contacto</a>
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <section id="inicio" class="min-h-screen flex items-center justify-center relative px-6 pt-20">
+    <!-- HERO SECTION (Presentación Mixta) -->
+    <section class="min-h-screen flex items-center justify-center relative px-6 pt-20">
         <div class="max-w-4xl mx-auto text-center z-10">
-            <div class="inline-block px-3 py-1 mb-6 text-xs font-semibold tracking-wider text-purple-300 uppercase bg-purple-900/30 rounded-full border border-purple-500/20 animate-fade-in-up">
-                Ingeniería & Automatización
+            <div class="inline-flex items-center gap-2 px-3 py-1 mb-6 text-xs font-semibold tracking-wider text-purple-300 uppercase bg-purple-900/30 rounded-full border border-purple-500/20">
+                <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
+                Disponible para trabajar
             </div>
-            <h1 class="text-5xl md:text-7xl font-bold mb-6 tracking-tight animate-fade-in-up" style="animation-delay: 0.1s;">
-                Transformando ideas en <br />
-                <span class="text-gradient">Realidad Digital</span>
+            
+            <h1 class="text-5xl md:text-7xl font-bold mb-6 leading-tight">
+                Juan David Posada<br />
+                <span class="text-gradient text-4xl md:text-6xl">Ingeniería & Desarrollo</span>
             </h1>
-            <p class="text-lg md:text-xl text-gray-400 mb-10 max-w-2xl mx-auto leading-relaxed animate-fade-in-up" style="animation-delay: 0.2s;">
-                Desarrollo web de alto impacto y automatización inteligente con Bots de WhatsApp. Potencia tu negocio con tecnología moderna.
+            
+            <p class="text-lg text-gray-400 mb-8 max-w-2xl mx-auto leading-relaxed">
+                Estudiante de Ingeniería de Sistemas con enfoque en desarrollo de software y soporte técnico. 
+                Combino conocimientos académicos sólidos con soluciones prácticas en 
+                <span class="text-white font-medium">Desarrollo Web</span> y <span class="text-white font-medium">Automatización (Bots)</span>.
             </p>
-            <div class="flex flex-col sm:flex-row justify-center gap-4 animate-fade-in-up" style="animation-delay: 0.3s;">
-                <a href="#contacto" class="group relative px-8 py-4 bg-white text-black font-bold rounded-full overflow-hidden hover:scale-105 transition-transform">
-                    <span class="relative z-10 flex items-center gap-2">
-                        Iniciar Proyecto <i data-lucide="arrow-right" class="w-4 h-4"></i>
-                    </span>
-                    <div class="absolute inset-0 bg-purple-200 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-500"></div>
+
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="#proyectos" class="px-8 py-3 bg-white text-black font-bold rounded-full hover:scale-105 transition-transform flex items-center justify-center gap-2">
+                    <i data-lucide="folder-git-2" class="w-4 h-4"></i> Ver Proyectos
                 </a>
-                <a href="#servicios" class="px-8 py-4 rounded-full glass-card hover:bg-white/10 transition-all font-medium border border-white/10">
-                    Ver Servicios
+                <a href="#contacto" class="px-8 py-3 rounded-full glass hover:bg-white/5 transition-all font-medium border border-white/10 flex items-center justify-center gap-2">
+                    <i data-lucide="download" class="w-4 h-4"></i> Contactar / CV
                 </a>
             </div>
         </div>
         
-        <!-- Elementos decorativos de fondo -->
-        <div class="absolute top-1/3 left-10 w-72 h-72 bg-purple-600 rounded-full mix-blend-multiply filter blur-[128px] opacity-20 animate-pulse-slow"></div>
-        <div class="absolute bottom-1/3 right-10 w-72 h-72 bg-blue-600 rounded-full mix-blend-multiply filter blur-[128px] opacity-20 animate-pulse-slow" style="animation-delay: 2s;"></div>
+        <!-- Glow effects -->
+        <div class="absolute top-1/4 left-10 w-64 h-64 bg-purple-600 rounded-full mix-blend-screen filter blur-[100px] opacity-20 animate-pulse-glow"></div>
+        <div class="absolute bottom-1/4 right-10 w-64 h-64 bg-blue-600 rounded-full mix-blend-screen filter blur-[100px] opacity-20 animate-pulse-glow" style="animation-delay: 2s;"></div>
     </section>
 
-    <!-- Servicios Section -->
-    <section id="servicios" class="py-24 px-6 relative z-10">
-        <div class="max-w-6xl mx-auto">
-            <div class="text-center mb-16 reveal">
-                <h2 class="text-3xl md:text-4xl font-bold mb-4">Mis Especialidades</h2>
-                <p class="text-gray-400">Soluciones tecnológicas adaptadas a tus necesidades</p>
-            </div>
+    <!-- PERFIL ACADÉMICO -->
+    <section id="perfil" class="py-20 px-6 bg-black/20">
+        <div class="max-w-5xl mx-auto">
+            <div class="grid md:grid-cols-2 gap-10">
+                
+                <!-- Educación -->
+                <div class="reveal">
+                    <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
+                        <i data-lucide="graduation-cap" class="text-purple-500"></i> Formación Académica
+                    </h2>
+                    
+                    <div class="space-y-6 border-l-2 border-purple-900/50 pl-6 ml-2">
+                        <div class="relative">
+                            <span class="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-purple-600 border-4 border-black"></span>
+                            <h3 class="text-xl font-bold text-white">Estudiante de Ingeniería de Sistemas</h3>
+                            <p class="text-purple-400 text-sm mb-2">En curso</p>
+                            <p class="text-gray-400 text-sm">Materias destacadas:</p>
+                            <ul class="text-gray-500 text-sm list-disc list-inside mt-1 space-y-1">
+                                <li>Lógica de Programación</li>
+                                <li>Estructura de Datos</li>
+                                <li>Arquitectura de PC</li>
+                            </ul>
+                        </div>
 
-            <div class="grid md:grid-cols-2 gap-8">
-                <!-- Tarjeta Web -->
-                <div class="glass-card p-8 rounded-3xl hover:border-purple-500/50 transition-all duration-300 hover:-translate-y-2 group reveal">
-                    <div class="w-14 h-14 bg-purple-900/30 rounded-2xl flex items-center justify-center mb-6 text-purple-400 group-hover:scale-110 transition-transform">
-                        <i data-lucide="layout" class="w-7 h-7"></i>
-                    </div>
-                    <h3 class="text-2xl font-bold mb-3">Diseño & Desarrollo Web</h3>
-                    <p class="text-gray-400 mb-6 leading-relaxed">
-                        Sitios web atractivos, rápidos y optimizados para móviles. Desde landing pages hasta plataformas complejas, utilizando las últimas tecnologías.
-                    </p>
-                    <ul class="space-y-2 text-sm text-gray-300">
-                        <li class="flex items-center gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-purple-500"></i> Diseño UI/UX Moderno</li>
-                        <li class="flex items-center gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-purple-500"></i> 100% Responsivo (Móvil/PC)</li>
-                        <li class="flex items-center gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-purple-500"></i> Optimización SEO</li>
-                    </ul>
-                </div>
-
-                <!-- Tarjeta Bots -->
-                <div class="glass-card p-8 rounded-3xl hover:border-green-500/50 transition-all duration-300 hover:-translate-y-2 group reveal">
-                    <div class="w-14 h-14 bg-green-900/20 rounded-2xl flex items-center justify-center mb-6 text-green-400 group-hover:scale-110 transition-transform">
-                        <i data-lucide="bot" class="w-7 h-7"></i>
-                    </div>
-                    <h3 class="text-2xl font-bold mb-3">Bots de WhatsApp</h3>
-                    <p class="text-gray-400 mb-6 leading-relaxed">
-                        Automatiza la atención al cliente, ventas y procesos repetitivos. Chatbots inteligentes que funcionan 24/7 para tu negocio.
-                    </p>
-                    <ul class="space-y-2 text-sm text-gray-300">
-                        <li class="flex items-center gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-green-500"></i> Respuestas Automáticas</li>
-                        <li class="flex items-center gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-green-500"></i> Menús Interactivos</li>
-                        <li class="flex items-center gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-green-500"></i> Integración con Bases de Datos</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Sobre Mí Section -->
-    <section id="sobre-mi" class="py-24 px-6 relative z-10 bg-black/20">
-        <div class="max-w-4xl mx-auto glass-card rounded-3xl p-8 md:p-12 reveal border-l-4 border-l-purple-600">
-            <div class="flex flex-col md:flex-row items-center gap-8">
-                <div class="relative">
-                    <div class="w-32 h-32 rounded-full overflow-hidden border-2 border-purple-500/30 p-1">
-                        <!-- Placeholder de avatar estilo memoji/abstracto -->
-                        <div class="w-full h-full bg-gradient-to-br from-purple-600 to-blue-600 rounded-full flex items-center justify-center text-3xl font-bold text-white">
-                            JP
+                        <div class="relative">
+                            <span class="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-gray-600 border-4 border-black"></span>
+                            <h3 class="text-lg font-bold text-white">Bachiller Académico</h3>
+                            <p class="text-gray-500 text-sm">Colegio [Nombre de tu colegio]</p>
                         </div>
                     </div>
                 </div>
-                <div class="flex-1 text-center md:text-left">
-                    <h2 class="text-3xl font-bold mb-2">Juan David Posada</h2>
-                    <p class="text-purple-400 font-medium mb-4">Estudiante de Ingeniería de Sistemas</p>
-                    <p class="text-gray-400 leading-relaxed mb-6">
-                        Soy un apasionado por la tecnología y la programación. Mi formación académica en ingeniería se combina con una visión creativa para ofrecer soluciones digitales robustas y estéticamente impecables. Me enfoco en escribir código limpio y crear experiencias de usuario memorables.
-                    </p>
-                    <div class="flex flex-wrap gap-2 justify-center md:justify-start">
-                        <span class="px-3 py-1 text-xs rounded-full bg-gray-800 border border-gray-700">HTML5/CSS3</span>
-                        <span class="px-3 py-1 text-xs rounded-full bg-gray-800 border border-gray-700">JavaScript</span>
-                        <span class="px-3 py-1 text-xs rounded-full bg-gray-800 border border-gray-700">Node.js</span>
-                        <span class="px-3 py-1 text-xs rounded-full bg-gray-800 border border-gray-700">WhatsApp API</span>
+
+                <!-- Idiomas & Resumen -->
+                <div class="reveal space-y-8">
+                    <div>
+                        <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
+                            <i data-lucide="languages" class="text-purple-500"></i> Idiomas
+                        </h2>
+                        <div class="glass p-6 rounded-2xl space-y-4">
+                            <div>
+                                <div class="flex justify-between text-sm mb-1">
+                                    <span class="font-medium text-white">Español</span>
+                                    <span class="text-purple-400">Nativo</span>
+                                </div>
+                                <div class="w-full bg-gray-800 rounded-full h-1.5">
+                                    <div class="bg-purple-500 h-1.5 rounded-full" style="width: 100%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-sm mb-1">
+                                    <span class="font-medium text-white">Inglés (A2)</span>
+                                    <span class="text-gray-400 text-xs">Lectura técnica y documentación</span>
+                                </div>
+                                <div class="w-full bg-gray-800 rounded-full h-1.5">
+                                    <div class="bg-blue-500 h-1.5 rounded-full" style="width: 40%"></div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Contacto Section -->
-    <section id="contacto" class="py-24 px-6 relative z-10">
-        <div class="max-w-3xl mx-auto text-center reveal">
-            <h2 class="text-4xl font-bold mb-8">¿Listo para empezar?</h2>
-            <p class="text-gray-400 mb-10 text-lg">
-                Hablemos sobre tu próximo proyecto. Estoy disponible para colaborar.
-            </p>
-
-            <div class="grid md:grid-cols-2 gap-4 max-w-xl mx-auto">
-                <!-- Botón WhatsApp -->
-                <a href="https://wa.me/573207744070" target="_blank" class="group glass-card p-6 rounded-2xl flex items-center justify-center gap-4 hover:bg-green-500/10 transition-all cursor-pointer border-green-500/20 hover:border-green-500">
-                    <div class="p-3 bg-green-500/20 rounded-full text-green-400 group-hover:scale-110 transition-transform">
-                        <i data-lucide="message-circle" class="w-6 h-6"></i>
-                    </div>
-                    <div class="text-left">
-                        <p class="text-xs text-green-400 uppercase tracking-wide">WhatsApp</p>
-                        <p class="text-lg font-semibold text-white">320 774 4070</p>
-                    </div>
-                </a>
-
-                <!-- Botón Email -->
-                <a href="mailto:Juanposada1608@gmail.com" class="group glass-card p-6 rounded-2xl flex items-center justify-center gap-4 hover:bg-purple-500/10 transition-all cursor-pointer border-purple-500/20 hover:border-purple-500">
-                    <div class="p-3 bg-purple-500/20 rounded-full text-purple-400 group-hover:scale-110 transition-transform">
-                        <i data-lucide="mail" class="w-6 h-6"></i>
-                    </div>
-                    <div class="text-left">
-                        <p class="text-xs text-purple-400 uppercase tracking-wide">Correo</p>
-                        <p class="text-sm font-semibold text-white break-all">Juanposada1608@gmail.com</p>
-                    </div>
-                </a>
-            </div>
+    <!-- HABILIDADES TÉCNICAS (GRID) -->
+    <section id="habilidades" class="py-20 px-6">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-3xl font-bold mb-10 text-center reveal">Arsenal Tecnológico</h2>
             
-            <div class="mt-12 p-6 glass-card rounded-2xl inline-block">
-                <p class="text-gray-400 text-sm flex items-center gap-2 justify-center">
-                    <i data-lucide="map-pin" class="w-4 h-4 text-purple-500"></i> 
-                    Disponible para proyectos remotos
-                </p>
+            <div class="grid md:grid-cols-2 gap-6">
+                <!-- Programación -->
+                <div class="glass p-8 rounded-3xl hover:border-purple-500/30 transition-colors reveal">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="p-3 bg-purple-900/20 rounded-xl text-purple-400">
+                            <i data-lucide="code-2" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="text-xl font-bold">Lenguajes & Programación</h3>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="skill-tag border-blue-500/30 text-blue-300">Python (Básico)</span>
+                        <span class="skill-tag border-orange-500/30 text-orange-300">Java (Académico)</span>
+                        <span class="skill-tag border-blue-600/30 text-blue-400">C++</span>
+                        <span class="skill-tag border-orange-600/30 text-orange-400">HTML5</span>
+                        <span class="skill-tag border-blue-400/30 text-blue-200">CSS3</span>
+                    </div>
+                </div>
+
+                <!-- Sistemas -->
+                <div class="glass p-8 rounded-3xl hover:border-green-500/30 transition-colors reveal">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="p-3 bg-green-900/20 rounded-xl text-green-400">
+                            <i data-lucide="cpu" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="text-xl font-bold">Sistemas & Herramientas</h3>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="flex items-start gap-3 text-sm text-gray-300">
+                            <i data-lucide="wrench" class="w-4 h-4 mt-1 text-green-500"></i>
+                            <div>
+                                <strong class="text-white block">Soporte Hardware</strong>
+                                Mantenimiento, cambio de pasta térmica, limpieza física.
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3 text-sm text-gray-300">
+                            <i data-lucide="hard-drive" class="w-4 h-4 mt-1 text-green-500"></i>
+                            <div>
+                                <strong class="text-white block">Sistemas Operativos</strong>
+                                Formateo, instalación limpia y drivers (Windows/Linux).
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3 text-sm text-gray-300">
+                            <i data-lucide="git-branch" class="w-4 h-4 mt-1 text-orange-500"></i>
+                            <div>
+                                <strong class="text-white block">Control de Versiones</strong>
+                                Git (Básico)
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="py-8 border-t border-white/10 relative z-10 text-center text-sm text-gray-500">
-        <p>&copy; 2024 Juan David Posada. Todos los derechos reservados.</p>
-        <p class="mt-2 text-xs opacity-50">Ingeniería en Sistemas</p>
-    </footer>
+    <!-- PROYECTOS ACADÉMICOS -->
+    <section id="proyectos" class="py-20 px-6 bg-black/20">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-3xl font-bold mb-2 text-center reveal">Proyectos Académicos</h2>
+            <p class="text-gray-400 text-center mb-12 reveal">Aplicación práctica de conocimientos durante la carrera</p>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Proyecto 1: Inventario -->
+                <div class="glass rounded-2xl overflow-hidden group reveal hover:-translate-y-2 transition-transform duration-300">
+                    <div class="h-40 bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center relative overflow-hidden">
+                        <!-- Icono decorativo -->
+                        <i data-lucide="package-search" class="w-20 h-20 text-white/5 absolute -right-4 -bottom-4 rotate-12 group-hover:scale-110 transition-transform"></i>
+                        <span class="text-4xl font-mono font-bold text-white/20">JAVA</span>
+                    </div>
+                    <div class="p-8">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="text-xl font-bold">Sistema de Gestión de Inventario</h3>
+                            <span class="text-xs font-bold px-2 py-1 bg-orange-900/30 text-orange-400 rounded border border-orange-500/20">NetBeans</span>
+                        </div>
+                        <p class="text-gray-400 text-sm leading-relaxed mb-6">
+                            Aplicación de escritorio para controlar el inventario de una tienda pequeña. 
+                            Implementación completa de funciones CRUD (Crear, Leer, Actualizar, Borrar) y 
+                            manejo de archivos de texto para persistencia de datos.
+                        </p>
+                        <div class="flex gap-2">
+                            <span class="text-xs text-gray-500 bg-white/5 px-2 py-1 rounded">Java</span>
+                            <span class="text-xs text-gray-500 bg-white/5 px-2 py-1 rounded">POO</span>
+                            <span class="text-xs text-gray-500 bg-white/5 px-2 py-1 rounded">Archivos</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Proyecto 2: Mantenimiento -->
+                <div class="glass rounded-2xl overflow-hidden group reveal hover:-translate-y-2 transition-transform duration-300">
+                    <div class="h-40 bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center relative overflow-hidden">
+                        <i data-lucide="settings" class="w-20 h-20 text-white/5 absolute -right-4 -bottom-4 rotate-12 group-hover:scale-110 transition-transform"></i>
+                        <span class="text-4xl font-mono font-bold text-white/20">HARDWARE</span>
+                    </div>
+                    <div class="p-8">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="text-xl font-bold">Ensamble y Mantenimiento</h3>
+                            <span class="text-xs font-bold px-2 py-1 bg-green-900/30 text-green-400 rounded border border-green-500/20">Soporte</span>
+                        </div>
+                        <p class="text-gray-400 text-sm leading-relaxed mb-6">
+                            Diagnóstico y optimización profesional de equipos de cómputo. 
+                            Realización de mantenimiento preventivo y correctivo (limpieza, pasta térmica) 
+                            y configuración de software para optimizar rendimiento.
+                        </p>
+                        <div class="flex gap-2">
+                            <span class="text-xs text-gray-500 bg-white/5 px-2 py-1 rounded">Hardware</span>
+                            <span class="text-xs text-gray-500 bg-white/5 px-2 py-1 rounded">Optimización</span>
+                            <span class="text-xs text-gray-500 bg-white/5 px-2 py-1 rounded">Drivers</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SERVICIOS (Lo que vendes) -->
+    <section id="servicios" class="py-20 px-6">
+        <div class="max-w-5xl mx-auto text-center reveal">
+            <h2 class="text-3xl font-bold mb-10">Servicios Freelance</h2>
+            <div class="grid md:grid-cols-2 gap-6">
+                <!-- Web -->
+                <div class="p-6 rounded-2xl border border-purple-500/20 bg-purple-900/5 hover:bg-purple-900/10 transition-colors">
+                    <i data-lucide="layout-template" class="w-10 h-10 text-purple-400 mx-auto mb-4"></i>
+                    <h3 class="text-xl font-bold mb-2">Desarrollo Web</h3>
+                    <p class="text-gray-400 text-sm">Creación de landing pages modernas y atractivas para negocios y marcas personales.</p>
+                </div>
+                <!-- Bots -->
+                <div class="p-6 rounded-2xl border border-green-500/20 bg-green-900/5 hover:bg-green-900/10 transition-colors">
+                    <i data-lucide="message-square" class="w-10 h-10 text-green-400 mx-auto mb-4"></i>
+                    <h3 class="text-xl font-bold mb-2">Bots de WhatsApp</h3>
+                    <p class="text-gray-400 text-sm">Automatización de respuestas y flujos de atención al cliente.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER / CONTACTO -->
+    <section id="contacto" class="py-20 px-6 border-t border-white/5">
+        <div class="max-w-3xl mx-auto text-center reveal">
+            <h2 class="text-4xl font-bold mb-8">Hablemos</h2>
+            <p class="text-gray-400 mb-10">
+                ¿Tienes una idea o necesitas soporte técnico?
+            </p>
+
+            <div class="flex flex-col md:flex-row justify-center gap-4 mb-12">
+                <a href="https://wa.me/573207744070" target="_blank" class="flex items-center justify-center gap-3 px-6 py-4 glass rounded-xl hover:bg-green-500/20 hover:border-green-500/50 transition-all group">
+                    <i data-lucide="phone" class="text-green-400 group-hover:scale-110 transition-transform"></i>
+                    <div class="text-left">
+                        <span class="block text-xs text-green-400 uppercase">WhatsApp / Celular</span>
+                        <span class="font-bold text-white">320 77 44070</span>
+                    </div>
+                </a>
+
+                <a href="mailto:Juanposada1608@gmail.com" class="flex items-center justify-center gap-3 px-6 py-4 glass rounded-xl hover:bg-purple-500/20 hover:border-purple-500/50 transition-all group">
+                    <i data-lucide="mail" class="text-purple-400 group-hover:scale-110 transition-transform"></i>
+                    <div class="text-left">
+                        <span class="block text-xs text-purple-400 uppercase">Email</span>
+                        <span class="font-bold text-white">Juanposada1608@gmail.com</span>
+                    </div>
+                </a>
+            </div>
+
+            <footer class="text-gray-600 text-sm">
+                <p>&copy; 2024 Juan David Posada. Todos los derechos reservados.</p>
+                <div class="mt-4 flex justify-center gap-4 opacity-50">
+                    <i data-lucide="github" class="w-5 h-5 hover:text-white cursor-pointer"></i>
+                    <i data-lucide="linkedin" class="w-5 h-5 hover:text-white cursor-pointer"></i>
+                </div>
+            </footer>
+        </div>
+    </section>
 
     <!-- Scripts -->
     <script>
-        // Inicializar Iconos Lucide
-        lucide.createIcons();
+        // Envolvemos todo en una función autoejecutable para evitar conflictos de variables globales
+        (() => {
+            lucide.createIcons();
 
-        // Animación al hacer Scroll
-        const revealElements = document.querySelectorAll('.reveal');
-        
-        const revealOnScroll = () => {
-            const windowHeight = window.innerHeight;
-            const elementVisible = 150;
+            // Scroll Reveal
+            const reveal = () => {
+                const reveals = document.querySelectorAll('.reveal');
+                const windowHeight = window.innerHeight;
+                const elementVisible = 100;
 
-            revealElements.forEach((reveal) => {
-                const elementTop = reveal.getBoundingClientRect().top;
-                if (elementTop < windowHeight - elementVisible) {
-                    reveal.classList.add('active');
-                }
-            });
-        };
-
-        window.addEventListener('scroll', revealOnScroll);
-        // Disparar una vez al cargar
-        revealOnScroll();
-
-        // CANVAS DE FONDO (Partículas conectadas)
-        const canvas = document.getElementById('particle-canvas');
-        const ctx = canvas.getContext('2d');
-        let width, height;
-        let particles = [];
-
-        // Ajustar tamaño
-        function resize() {
-            width = canvas.width = window.innerWidth;
-            height = canvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resize);
-        resize();
-
-        // Configuración de partículas
-        const particleCount = 60; // Cantidad de puntos
-        const connectionDistance = 150;
-
-        class Particle {
-            constructor() {
-                this.x = Math.random() * width;
-                this.y = Math.random() * height;
-                this.vx = (Math.random() - 0.5) * 0.5; // Velocidad X
-                this.vy = (Math.random() - 0.5) * 0.5; // Velocidad Y
-                this.size = Math.random() * 2 + 1;
-                this.color = `rgba(167, 139, 250, ${Math.random() * 0.5 + 0.1})`; // Tono púrpura
-            }
-
-            update() {
-                this.x += this.vx;
-                this.y += this.vy;
-
-                // Rebote en bordes
-                if (this.x < 0 || this.x > width) this.vx *= -1;
-                if (this.y < 0 || this.y > height) this.vy *= -1;
-            }
-
-            draw() {
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fillStyle = this.color;
-                ctx.fill();
-            }
-        }
-
-        // Inicializar partículas
-        for (let i = 0; i < particleCount; i++) {
-            particles.push(new Particle());
-        }
-
-        // Loop de animación
-        function animate() {
-            ctx.clearRect(0, 0, width, height);
-            
-            // Dibujar partículas y conexiones
-            for (let i = 0; i < particles.length; i++) {
-                let p1 = particles[i];
-                p1.update();
-                p1.draw();
-
-                // Conectar líneas
-                for (let j = i + 1; j < particles.length; j++) {
-                    let p2 = particles[j];
-                    let distance = Math.sqrt((p1.x - p2.x) ** 2 + (p1.y - p2.y) ** 2);
-
-                    if (distance < connectionDistance) {
-                        ctx.beginPath();
-                        ctx.strokeStyle = `rgba(139, 92, 246, ${1 - distance / connectionDistance * 0.8})`; // Línea púrpura desvanecida
-                        ctx.lineWidth = 0.5;
-                        ctx.moveTo(p1.x, p1.y);
-                        ctx.lineTo(p2.x, p2.y);
-                        ctx.stroke();
+                reveals.forEach((r) => {
+                    const elementTop = r.getBoundingClientRect().top;
+                    if (elementTop < windowHeight - elementVisible) {
+                        r.classList.add('active');
                     }
+                });
+            };
+            window.addEventListener('scroll', reveal);
+            reveal(); // Trigger once
+
+            // Particle System (Optimized)
+            const canvas = document.getElementById('particle-canvas');
+            const ctx = canvas.getContext('2d');
+            let w, h, particles = [];
+
+            const resize = () => {
+                w = canvas.width = window.innerWidth;
+                h = canvas.height = window.innerHeight;
+                initParticles();
+            };
+            
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * w;
+                    this.y = Math.random() * h;
+                    this.vx = (Math.random() - 0.5) * 0.3;
+                    this.vy = (Math.random() - 0.5) * 0.3;
+                    this.size = Math.random() * 2;
+                }
+                update() {
+                    this.x += this.vx; this.y += this.vy;
+                    if(this.x < 0 || this.x > w) this.vx *= -1;
+                    if(this.y < 0 || this.y > h) this.vy *= -1;
+                }
+                draw() {
+                    ctx.fillStyle = `rgba(167, 139, 250, ${Math.random() * 0.3})`;
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fill();
                 }
             }
-            requestAnimationFrame(animate);
-        }
 
-        animate();
+            function initParticles() {
+                particles = [];
+                for(let i=0; i<50; i++) particles.push(new Particle());
+            }
+
+            function animate() {
+                ctx.clearRect(0,0,w,h);
+                particles.forEach(p => {
+                    p.update();
+                    p.draw();
+                    // Conexiones sutiles
+                    particles.forEach(p2 => {
+                        let d = Math.sqrt((p.x-p2.x)**2 + (p.y-p2.y)**2);
+                        if(d < 100) {
+                            ctx.beginPath();
+                            ctx.strokeStyle = `rgba(124, 58, 237, ${0.1 - d/1000})`;
+                            ctx.lineWidth = 0.5;
+                            ctx.moveTo(p.x, p.y);
+                            ctx.lineTo(p2.x, p2.y);
+                            ctx.stroke();
+                        }
+                    });
+                });
+                requestAnimationFrame(animate);
+            }
+
+            window.addEventListener('resize', resize);
+            resize();
+            animate();
+        })();
     </script>
 </body>
 </html>
