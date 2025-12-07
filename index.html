@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juan David Posada | Desarrollo Web & Bots</title>
+    
+    <!-- Tailwind CSS (Framework de estilos) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Fuentes Google (Inter para estilo Mac/Clean) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Iconos Lucide -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Configuración personalizada de Tailwind -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            dark: '#0B0B15',
+                            purple: '#6D28D9',
+                            accent: '#A78BFA',
+                            glass: 'rgba(255, 255, 255, 0.05)',
+                        }
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        },
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Estilos base y efectos visuales */
+        body {
+            background-color: #050505;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        /* Fondo gradiente sutil */
+        .bg-gradient-radial {
+            background: radial-gradient(circle at center, #2e1065 0%, #000000 70%);
+            opacity: 0.4;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        /* Efecto Glassmorphism (Estilo Mac) */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .glass-nav {
+            background: rgba(5, 5, 5, 0.7);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Texto con gradiente */
+        .text-gradient {
+            background: linear-gradient(to right, #c084fc, #6366f1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Canvas para partículas */
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            pointer-events: none;
+        }
+
+        /* Utilidad para animaciones al hacer scroll */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-purple-500 selection:text-white">
+
+    <!-- Canvas para animación de fondo -->
+    <canvas id="particle-canvas"></canvas>
+    <div class="bg-gradient-radial"></div>
+
+    <!-- Navegación -->
+    <nav class="fixed w-full z-50 glass-nav transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold tracking-tighter hover:opacity-80 transition-opacity">
+                JD<span class="text-purple-500">.</span>Posada
+            </a>
+            <div class="hidden md:flex space-x-8 text-sm font-medium text-gray-300">
+                <a href="#inicio" class="hover:text-white transition-colors">Inicio</a>
+                <a href="#servicios" class="hover:text-white transition-colors">Servicios</a>
+                <a href="#sobre-mi" class="hover:text-white transition-colors">Sobre Mí</a>
+                <a href="#contacto" class="px-4 py-2 rounded-full bg-purple-600/20 text-purple-300 border border-purple-500/30 hover:bg-purple-600 hover:text-white transition-all">
+                    Contáctame
+                </a>
+            </div>
+            <!-- Botón móvil -->
+            <button class="md:hidden text-white" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')">
+                <i data-lucide="menu"></i>
+            </button>
+        </div>
+        <!-- Menú Móvil -->
+        <div id="mobile-menu" class="hidden md:hidden glass-card absolute w-full left-0 border-t border-gray-800 p-4 flex flex-col space-y-4">
+            <a href="#inicio" class="block text-gray-300 hover:text-white">Inicio</a>
+            <a href="#servicios" class="block text-gray-300 hover:text-white">Servicios</a>
+            <a href="#sobre-mi" class="block text-gray-300 hover:text-white">Sobre Mí</a>
+            <a href="#contacto" class="block text-purple-400 font-bold">Contacto</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="inicio" class="min-h-screen flex items-center justify-center relative px-6 pt-20">
+        <div class="max-w-4xl mx-auto text-center z-10">
+            <div class="inline-block px-3 py-1 mb-6 text-xs font-semibold tracking-wider text-purple-300 uppercase bg-purple-900/30 rounded-full border border-purple-500/20 animate-fade-in-up">
+                Ingeniería & Automatización
+            </div>
+            <h1 class="text-5xl md:text-7xl font-bold mb-6 tracking-tight animate-fade-in-up" style="animation-delay: 0.1s;">
+                Transformando ideas en <br />
+                <span class="text-gradient">Realidad Digital</span>
+            </h1>
+            <p class="text-lg md:text-xl text-gray-400 mb-10 max-w-2xl mx-auto leading-relaxed animate-fade-in-up" style="animation-delay: 0.2s;">
+                Desarrollo web de alto impacto y automatización inteligente con Bots de WhatsApp. Potencia tu negocio con tecnología moderna.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4 animate-fade-in-up" style="animation-delay: 0.3s;">
+                <a href="#contacto" class="group relative px-8 py-4 bg-white text-black font-bold rounded-full overflow-hidden hover:scale-105 transition-transform">
+                    <span class="relative z-10 flex items-center gap-2">
+                        Iniciar Proyecto <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </span>
+                    <div class="absolute inset-0 bg-purple-200 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-500"></div>
+                </a>
+                <a href="#servicios" class="px-8 py-4 rounded-full glass-card hover:bg-white/10 transition-all font-medium border border-white/10">
+                    Ver Servicios
+                </a>
+            </div>
+        </div>
+        
+        <!-- Elementos decorativos de fondo -->
+        <div class="absolute top-1/3 left-10 w-72 h-72 bg-purple-600 rounded-full mix-blend-multiply filter blur-[128px] opacity-20 animate-pulse-slow"></div>
+        <div class="absolute bottom-1/3 right-10 w-72 h-72 bg-blue-600 rounded-full mix-blend-multiply filter blur-[128px] opacity-20 animate-pulse-slow" style="animation-delay: 2s;"></div>
+    </section>
+
+    <!-- Servicios Section -->
+    <section id="servicios" class="py-24 px-6 relative z-10">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Mis Especialidades</h2>
+                <p class="text-gray-400">Soluciones tecnológicas adaptadas a tus necesidades</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Tarjeta Web -->
+                <div class="glass-card p-8 rounded-3xl hover:border-purple-500/50 transition-all duration-300 hover:-translate-y-2 group reveal">
+                    <div class="w-14 h-14 bg-purple-900/30 rounded-2xl flex items-center justify-center mb-6 text-purple-400 group-hover:scale-110 transition-transform">
+                        <i data-lucide="layout" class="w-7 h-7"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-3">Diseño & Desarrollo Web</h3>
+                    <p class="text-gray-400 mb-6 leading-relaxed">
+                        Sitios web atractivos, rápidos y optimizados para móviles. Desde landing pages hasta plataformas complejas, utilizando las últimas tecnologías.
+                    </p>
+                    <ul class="space-y-2 text-sm text-gray-300">
+                        <li class="flex items-center gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-purple-500"></i> Diseño UI/UX Moderno</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-purple-500"></i> 100% Responsivo (Móvil/PC)</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-purple-500"></i> Optimización SEO</li>
+                    </ul>
+                </div>
+
+                <!-- Tarjeta Bots -->
+                <div class="glass-card p-8 rounded-3xl hover:border-green-500/50 transition-all duration-300 hover:-translate-y-2 group reveal">
+                    <div class="w-14 h-14 bg-green-900/20 rounded-2xl flex items-center justify-center mb-6 text-green-400 group-hover:scale-110 transition-transform">
+                        <i data-lucide="bot" class="w-7 h-7"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-3">Bots de WhatsApp</h3>
+                    <p class="text-gray-400 mb-6 leading-relaxed">
+                        Automatiza la atención al cliente, ventas y procesos repetitivos. Chatbots inteligentes que funcionan 24/7 para tu negocio.
+                    </p>
+                    <ul class="space-y-2 text-sm text-gray-300">
+                        <li class="flex items-center gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-green-500"></i> Respuestas Automáticas</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-green-500"></i> Menús Interactivos</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-green-500"></i> Integración con Bases de Datos</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sobre Mí Section -->
+    <section id="sobre-mi" class="py-24 px-6 relative z-10 bg-black/20">
+        <div class="max-w-4xl mx-auto glass-card rounded-3xl p-8 md:p-12 reveal border-l-4 border-l-purple-600">
+            <div class="flex flex-col md:flex-row items-center gap-8">
+                <div class="relative">
+                    <div class="w-32 h-32 rounded-full overflow-hidden border-2 border-purple-500/30 p-1">
+                        <!-- Placeholder de avatar estilo memoji/abstracto -->
+                        <div class="w-full h-full bg-gradient-to-br from-purple-600 to-blue-600 rounded-full flex items-center justify-center text-3xl font-bold text-white">
+                            JP
+                        </div>
+                    </div>
+                </div>
+                <div class="flex-1 text-center md:text-left">
+                    <h2 class="text-3xl font-bold mb-2">Juan David Posada</h2>
+                    <p class="text-purple-400 font-medium mb-4">Estudiante de Ingeniería de Sistemas</p>
+                    <p class="text-gray-400 leading-relaxed mb-6">
+                        Soy un apasionado por la tecnología y la programación. Mi formación académica en ingeniería se combina con una visión creativa para ofrecer soluciones digitales robustas y estéticamente impecables. Me enfoco en escribir código limpio y crear experiencias de usuario memorables.
+                    </p>
+                    <div class="flex flex-wrap gap-2 justify-center md:justify-start">
+                        <span class="px-3 py-1 text-xs rounded-full bg-gray-800 border border-gray-700">HTML5/CSS3</span>
+                        <span class="px-3 py-1 text-xs rounded-full bg-gray-800 border border-gray-700">JavaScript</span>
+                        <span class="px-3 py-1 text-xs rounded-full bg-gray-800 border border-gray-700">Node.js</span>
+                        <span class="px-3 py-1 text-xs rounded-full bg-gray-800 border border-gray-700">WhatsApp API</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contacto Section -->
+    <section id="contacto" class="py-24 px-6 relative z-10">
+        <div class="max-w-3xl mx-auto text-center reveal">
+            <h2 class="text-4xl font-bold mb-8">¿Listo para empezar?</h2>
+            <p class="text-gray-400 mb-10 text-lg">
+                Hablemos sobre tu próximo proyecto. Estoy disponible para colaborar.
+            </p>
+
+            <div class="grid md:grid-cols-2 gap-4 max-w-xl mx-auto">
+                <!-- Botón WhatsApp -->
+                <a href="https://wa.me/573207744070" target="_blank" class="group glass-card p-6 rounded-2xl flex items-center justify-center gap-4 hover:bg-green-500/10 transition-all cursor-pointer border-green-500/20 hover:border-green-500">
+                    <div class="p-3 bg-green-500/20 rounded-full text-green-400 group-hover:scale-110 transition-transform">
+                        <i data-lucide="message-circle" class="w-6 h-6"></i>
+                    </div>
+                    <div class="text-left">
+                        <p class="text-xs text-green-400 uppercase tracking-wide">WhatsApp</p>
+                        <p class="text-lg font-semibold text-white">320 774 4070</p>
+                    </div>
+                </a>
+
+                <!-- Botón Email -->
+                <a href="mailto:Juanposada1608@gmail.com" class="group glass-card p-6 rounded-2xl flex items-center justify-center gap-4 hover:bg-purple-500/10 transition-all cursor-pointer border-purple-500/20 hover:border-purple-500">
+                    <div class="p-3 bg-purple-500/20 rounded-full text-purple-400 group-hover:scale-110 transition-transform">
+                        <i data-lucide="mail" class="w-6 h-6"></i>
+                    </div>
+                    <div class="text-left">
+                        <p class="text-xs text-purple-400 uppercase tracking-wide">Correo</p>
+                        <p class="text-sm font-semibold text-white break-all">Juanposada1608@gmail.com</p>
+                    </div>
+                </a>
+            </div>
+            
+            <div class="mt-12 p-6 glass-card rounded-2xl inline-block">
+                <p class="text-gray-400 text-sm flex items-center gap-2 justify-center">
+                    <i data-lucide="map-pin" class="w-4 h-4 text-purple-500"></i> 
+                    Disponible para proyectos remotos
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-8 border-t border-white/10 relative z-10 text-center text-sm text-gray-500">
+        <p>&copy; 2024 Juan David Posada. Todos los derechos reservados.</p>
+        <p class="mt-2 text-xs opacity-50">Ingeniería en Sistemas</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // Inicializar Iconos Lucide
+        lucide.createIcons();
+
+        // Animación al hacer Scroll
+        const revealElements = document.querySelectorAll('.reveal');
+        
+        const revealOnScroll = () => {
+            const windowHeight = window.innerHeight;
+            const elementVisible = 150;
+
+            revealElements.forEach((reveal) => {
+                const elementTop = reveal.getBoundingClientRect().top;
+                if (elementTop < windowHeight - elementVisible) {
+                    reveal.classList.add('active');
+                }
+            });
+        };
+
+        window.addEventListener('scroll', revealOnScroll);
+        // Disparar una vez al cargar
+        revealOnScroll();
+
+        // CANVAS DE FONDO (Partículas conectadas)
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+        let width, height;
+        let particles = [];
+
+        // Ajustar tamaño
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        // Configuración de partículas
+        const particleCount = 60; // Cantidad de puntos
+        const connectionDistance = 150;
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.vx = (Math.random() - 0.5) * 0.5; // Velocidad X
+                this.vy = (Math.random() - 0.5) * 0.5; // Velocidad Y
+                this.size = Math.random() * 2 + 1;
+                this.color = `rgba(167, 139, 250, ${Math.random() * 0.5 + 0.1})`; // Tono púrpura
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+
+                // Rebote en bordes
+                if (this.x < 0 || this.x > width) this.vx *= -1;
+                if (this.y < 0 || this.y > height) this.vy *= -1;
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+            }
+        }
+
+        // Inicializar partículas
+        for (let i = 0; i < particleCount; i++) {
+            particles.push(new Particle());
+        }
+
+        // Loop de animación
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+            
+            // Dibujar partículas y conexiones
+            for (let i = 0; i < particles.length; i++) {
+                let p1 = particles[i];
+                p1.update();
+                p1.draw();
+
+                // Conectar líneas
+                for (let j = i + 1; j < particles.length; j++) {
+                    let p2 = particles[j];
+                    let distance = Math.sqrt((p1.x - p2.x) ** 2 + (p1.y - p2.y) ** 2);
+
+                    if (distance < connectionDistance) {
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(139, 92, 246, ${1 - distance / connectionDistance * 0.8})`; // Línea púrpura desvanecida
+                        ctx.lineWidth = 0.5;
+                        ctx.moveTo(p1.x, p1.y);
+                        ctx.lineTo(p2.x, p2.y);
+                        ctx.stroke();
+                    }
+                }
+            }
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    </script>
+</body>
+</html>
